@@ -1,0 +1,190 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "UNAS API",
+    "version": "1.0.0",
+    "description": "API for interacting with the UNAS webshop"
+  },
+  "servers": [
+    {
+      "url": "https://api.unas.eu/shop/",
+      "description": "UNAS API server"
+    }
+  ],
+  "paths": {
+    "/getProduct": {
+      "post": {
+        "summary": "Retrieve a list of products",
+        "description": "Fetch products from the UNAS webshop based on filters and categories.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/xml": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "Auth": {
+                    "type": "object",
+                    "properties": {
+                      "Username": { "type": "string" },
+                      "Password": { "type": "string" },
+                      "ShopId": { "type": "string" }
+                    },
+                    "required": ["Username", "Password", "ShopId"]
+                  },
+                  "Filter": {
+                    "type": "object",
+                    "properties": {
+                      "Category": { "type": "string" },
+                      "Search": { "type": "string" },
+                      "Limit": { "type": "integer" },
+                      "Offset": { "type": "integer" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "List of products",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "Products": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "Id": { "type": "string" },
+                          "Name": { "type": "string" },
+                          "Price": { "type": "number" },
+                          "Stock": { "type": "integer" }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/setCart": {
+      "post": {
+        "summary": "Add a product to the cart",
+        "description": "Add a product to the customer's cart.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/xml": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "Auth": {
+                    "type": "object",
+                    "properties": {
+                      "Username": { "type": "string" },
+                      "Password": { "type": "string" },
+                      "ShopId": { "type": "string" }
+                    },
+                    "required": ["Username", "Password", "ShopId"]
+                  },
+                  "Cart": {
+                    "type": "object",
+                    "properties": {
+                      "ProductId": { "type": "string" },
+                      "Quantity": { "type": "integer" }
+                    },
+                    "required": ["ProductId", "Quantity"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Product added to cart",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "Status": { "type": "string" },
+                    "Message": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/getOrder": {
+      "post": {
+        "summary": "Retrieve orders",
+        "description": "Fetch orders from the webshop.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/xml": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "Auth": {
+                    "type": "object",
+                    "properties": {
+                      "Username": { "type": "string" },
+                      "Password": { "type": "string" },
+                      "ShopId": { "type": "string" }
+                    },
+                    "required": ["Username", "Password", "ShopId"]
+                  },
+                  "Filter": {
+                    "type": "object",
+                    "properties": {
+                      "OrderId": { "type": "string" },
+                      "Status": { "type": "string" },
+                      "DateFrom": { "type": "string", "format": "date" },
+                      "DateTo": { "type": "string", "format": "date" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "List of orders",
+            "content": {
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "Orders": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "OrderId": { "type": "string" },
+                          "Status": { "type": "string" },
+                          "TotalPrice": { "type": "number" }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
